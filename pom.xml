@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.servet</groupId>
+  <artifactId>restful-booker-rest-assured</artifactId>
+  <version>1.0.0</version>
+  <name>restful-booker-rest-assured</name>
+  <description>API tests for Restful Booker with REST Assured: specs, POJOs, JSON Schema, JUnit 6</description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>21</maven.compiler.release>
+    <rest-assured.version>6.2.0</rest-assured.version>
+    <junit.version>6.1.3</junit.version>
+    <assertj.version>3.27.7</assertj.version>
+    <jackson.version>2.22.4</jackson.version>
+    <allure.version>2.35.5</allure.version>
+    <!-- mvn test -Dgroups=smoke   ·   mvn test -DexcludedGroups=known-bug -->
+    <groups></groups>
+    <excludedGroups></excludedGroups>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>${junit.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <version>${rest-assured.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>json-schema-validator</artifactId>
+      <version>${rest-assured.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- POJO <-> JSON; LocalDate for the booking dates -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>${jackson.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>${assertj.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-junit5</artifactId>
+      <version>${allure.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.5.6</version>
+        <configuration>
+          <groups>${groups}</groups>
+          <excludedGroups>${excludedGroups}</excludedGroups>
+          <!-- The project lives on drive E:, the manifest-only JAR in the temp folder on C:.
+               JDK 26 then drops classpath entries ("'other' has different root"). -->
+          <useManifestOnlyJar>false</useManifestOnlyJar>
+          <systemPropertyVariables>
+            <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+      <!-- mvn allure:serve -->
+      <plugin>
+        <groupId>io.qameta.allure</groupId>
+        <artifactId>allure-maven</artifactId>
+        <version>2.18.0</version>
+        <configuration>
+          <reportVersion>2.46.1</reportVersion>
+          <resultsDirectory>allure-results</resultsDirectory>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
