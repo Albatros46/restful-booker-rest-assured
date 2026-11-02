@@ -130,6 +130,3 @@ mvn allure:serve                          # Allure report
 ```
 
 The password comes from `RB_PASSWORD` (a GitHub secret in CI); without it the public demo password is used. CI runs on every push and every night (the public API can change without a commit here).
-
-## What I learned
-- _TODO: 2–3 sentences in your own words_
